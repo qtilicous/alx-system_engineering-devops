@@ -1,5 +1,5 @@
 #!/bin/bash
-ls -la cd .. ls -la cd /boot ls -la
+ls -la n\cd .. n\ls -la n\cd /boot n\ls -la
 
 
 
