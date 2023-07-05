@@ -1,2 +1,2 @@
 #!/bin/bash
-find . -maxdepth l -name "*.html" -newer ../ -exec cp {} ../ \> /dev/null 2> /dev/null
+find . -maxdepth l -name "*.html" -newer ../ -exec cp {} ../ \ >/dev/null 2> /dev/null
