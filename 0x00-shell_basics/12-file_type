@@ -1,3 +1,2 @@
 #!/bin/bash
-file -b /tmp/iamafile 2>/dev/null 
-tr -d '\n'
+file -b /tmp/iamafile 2>/dev/null \tr -d '\n'
