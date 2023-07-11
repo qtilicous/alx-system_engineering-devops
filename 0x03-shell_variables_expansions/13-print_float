@@ -1,2 +1,2 @@
 #!/bin/bash
-NUM=$(echo "scale=2 | POWER/DIVIDE" | bc) | printf "%.2f \n" $NUM
+printf "%.2f\n" "$NUM"
