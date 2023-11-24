@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 # This script displays lines containing the word "bash" and extracts the PID
-pgrep bash
+# Display lines containing the word "bash" in process list
+# shellcheck disable=SC2009
+ps aux | grep 'bash' | grep -v 'grep'
