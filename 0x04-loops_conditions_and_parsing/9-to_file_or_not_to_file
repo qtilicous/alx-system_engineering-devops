@@ -3,10 +3,8 @@
 file_path="school"
 if [ -e "$file_path" ]; then
     echo "$file_path file exists"
-
     if [ -s "$file_path" ]; then
         echo "$file_path file is not empty"
-
         if [ -f "$file_path" ]; then
             echo "$file_path is a regular file"
         fi
