@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# This script displays listening ports, showing only listening sockets and
+# The PID/Program name to which each socket belongs
+sudo lsof -i -P -n | grep LISTEN
