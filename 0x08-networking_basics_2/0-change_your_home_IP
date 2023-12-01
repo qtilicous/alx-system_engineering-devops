@@ -2,7 +2,7 @@
 # This script configures the hosts file to change the IP address associated with localhost and facebook.com.
 
 sudo cp /etc/hosts /etc/hosts.bak
-sudo sed -i 's/127.0.0.1\tlocalhost/127.0.0.2\tlocalhost/' /etc/hosts
-sudo sed -i 's/157.240.11.35\tfacebook.com/8.8.8.8\tfacebook.com/' /etc/hosts
+sudo sed -i 's/127.0.0.1[[:space:]]*localhost/127.0.0.2\tlocalhost/' /etc/hosts
+sudo sed -i 's/157.240.11.35[[:space:]]*facebook.com/8.8.8.8\tfacebook.com/' /etc/hosts
 cat /etc/hosts
 sudo systemd-resolve --flush-caches
