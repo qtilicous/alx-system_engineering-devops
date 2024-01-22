@@ -1,13 +1,8 @@
 #!/usr/bin/env bash
-# Install Nginx on an Ubuntu machine and configure it to meet specified requirements.
 
+# Install and configure Nginx to listen on port 80, serving a "Hello World!" page.
 apt-get update
 apt-get install -y nginx
-
 sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/default
-
 /etc/init.d/nginx restart
-
 echo "Hello World!" > /usr/share/nginx/html/index.html
-
-echo "Nginx installed and configured. Hello World page created."
