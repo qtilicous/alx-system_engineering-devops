@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Script to install and configure Nginx on Ubuntu 16.04
+# Script to install and configure Nginx
 
 apt-get update -y
 apt-get install -y nginx
-sed -i 's/80/8080/g' /etc/nginx/sites-enabled/default
+sed -i 's/80 default_server/80/' /etc/nginx/sites-available/default
 service nginx restart
 echo "Hello World!" > /var/www/html/index.html
 echo "Nginx installed and configured successfully. Web server is now listening on port 8080."

@@ -1,5 +1,36 @@
 #!/usr/bin/env bash
-# Configure Nginx to redirect /redirect_me to another page with a 301 Moved Permanently
+# Bash script to configure Nginx redirection on Ubuntu
 
-echo "location /redirect_me { return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4; }" | tee -a /etc/nginx/sites-available/default > /dev/null
-/etc/init.d/nginx restart
+# Redirect configuration
+REDIRECT_CONFIG="
+server {
+    listen 80;
+    listen [::]:80;
+    server_name _;
+
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+
+    location / {
+        # Your existing configuration for the default location
+        include /etc/nginx/sites-available/default;
+    }
+}
+"
+
+# Create a temporary file for the new Nginx configuration
+TMP_FILE=$(mktemp)
+
+# Add or replace the entire server block in a new configuration file
+echo "$REDIRECT_CONFIG" > "$TMP_FILE"
+
+# Link the new configuration file to Nginx sites-enabled
+ln -sf "$TMP_FILE" /etc/nginx/sites-available/redirect_me
+ln -sf /etc/nginx/sites-available/redirect_me /etc/nginx/sites-enabled/
+
+# Restart Nginx to apply changes
+service nginx restart
+
+# Display success message
+echo "Nginx redirection configured successfully."
