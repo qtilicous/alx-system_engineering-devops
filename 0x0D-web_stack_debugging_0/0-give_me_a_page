@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Start Apache and configure it to return a page containing Hello Holberton
+
+# Install Apache if not already installed
+apt-get update
+apt-get install -y apache2
+
+# Start the Apache service
+service apache2 start
+
+# Create a simple HTML page with Hello Holberton
+echo "<html><head></head><body>Hello Holberton</body></html>" > /var/www/html/index.html
+
+# Ensure the Apache service is running
+service apache2 status
+
+# Output a success message
+echo "Apache is now running and configured to return a page with Hello Holberton"
