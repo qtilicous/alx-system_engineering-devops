@@ -1,12 +1,43 @@
 #!/usr/bin/env bash
 # This script configures Nginx to include a custom HTTP response header
 
-sudo apt-get update
-sudo apt-get install -y nginx
+# Update the package index
+sudo apt update
 
+# Install Nginx if not already installed
+sudo apt install -y nginx
+
+# Define the custom header value as the hostname of the server
 HOSTNAME=$(hostname)
 
-CONFIG_FILE="/etc/nginx/sites-available/default"
-sudo sed -i '/server_name _;/a \\tadd_header X-Served-By $HOSTNAME;' $CONFIG_FILE
+# Configure Nginx to include the custom HTTP response header
+sudo bash -c "cat > /etc/nginx/sites-available/custom-header" << EOF
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
 
-sudo systemctl restart nginx
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+
+    server_name _;
+
+    location / {
+        try_files \$uri \$uri/ =404;
+        add_header X-Served-By $HOSTNAME;
+    }
+}
+EOF
+
+# Remove the default symlink in sites-enabled if it exists
+sudo rm -f /etc/nginx/sites-enabled/default
+
+# Create a symlink to enable the custom header configuration
+sudo ln -s /etc/nginx/sites-available/custom-header /etc/nginx/sites-enabled/
+
+# Test Nginx configuration
+sudo nginx -t
+
+# Reload Nginx to apply the changes
+sudo systemctl reload nginx
+
+echo "Nginx configured successfully with custom HTTP response header X-Served-By: $HOSTNAME"
