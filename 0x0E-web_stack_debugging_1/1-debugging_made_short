@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 # Configure Nginx to listen on port 80
-sed -i 's/listen\s*80;/listen 80 default_server;/g' /etc/nginx/sites-available/default
-(sleep 1 && service nginx stop) & service nginx start
-(sleep 1 && ! service nginx status | grep -q "nginx is running") && echo " * nginx is not running"
+ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+service nginx start
+kill "$(pgrep 'nginx' | head -1)"
