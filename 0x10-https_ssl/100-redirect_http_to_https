@@ -1,0 +1,55 @@
+# Global configuration
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    chroot /var/lib/haproxy
+    stats socket /run/haproxy/admin.sock mode 660 level admin
+    stats timeout 30s
+    user haproxy
+    group haproxy
+    daemon
+
+# Default SSL certificate
+defaults
+    log global
+    mode http
+    option httplog
+    option dontlognull
+    timeout connect 5000ms
+    timeout client 50000ms
+    timeout server 50000ms
+
+# Frontend configuration for HTTP
+frontend www-http
+    bind *:80
+    mode http
+    option forwardfor
+    option http-server-close
+    # Redirect HTTP traffic to HTTPS
+    redirect scheme https code 301 if !{ ssl_fc }
+
+# Frontend configuration for HTTPS
+frontend www-https
+    bind *:443 ssl crt /etc/ssl/certs/holberton.online.pem
+    mode http
+    option forwardfor
+
+    acl is_holberton hdr_end(host) -i www.holberton.online
+
+    use_backend holberton_backend if is_holberton
+
+# Backend configuration for holberton.online
+backend holberton_backend
+    mode http
+    balance roundrobin
+    option http-server-close
+    server web-server-1 <your_web_server_ip>:80 check
+
+# Error handling
+errorfile 400 /etc/haproxy/errors/400.http
+errorfile 403 /etc/haproxy/errors/403.http
+errorfile 408 /etc/haproxy/errors/408.http
+errorfile 500 /etc/haproxy/errors/500.http
+errorfile 502 /etc/haproxy/errors/502.http
+errorfile 503 /etc/haproxy/errors/503.http
+errorfile 504 /etc/haproxy/errors/504.http
