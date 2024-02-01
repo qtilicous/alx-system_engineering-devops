@@ -2,5 +2,5 @@
 # This script configures Nginx to listen on port 80
 
 rm /etc/nginx/sites-enabled/default
-ln -s /etc/nginx/sitesavailable/default /etc/nginx/sites-enabled/default
-service restart nginx
+ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+service nginx restart
