@@ -1,26 +1,51 @@
 #!/usr/bin/env bash
-# This script displays information about subdomains
+# This script fetches DNS records for a domain and subdomains, and displays relevant information.
 
+# Function to display information about a subdomain
 display_info() {
     local domain="$1"
     local subdomain="$2"
-
-    if [ -z "$subdomain" ]; then
-        subdomains=("www" "lb-01" "web-01" "web-02")
-    else
-        subdomains=("$subdomain")
-    fi
-
-    for sub in "${subdomains[@]}"; do
-        result=$(dig +short "$sub"."$domain")
-
-        if [ -z "$result" ]; then
-            echo "The subdomain $sub does not exist."
-        else
-            record_type=$(dig "$sub"."$domain" | awk '/^'"$sub"'\.'"$domain"'\./ {print $4}')
-            echo "The subdomain $sub is a $record_type record and points to $result"
-        fi
-    done
+    local record_type="$3"
+    local destination="$4"
+    echo "The subdomain $subdomain is a $record_type record and points to $destination"
 }
 
-display_info "$1" "$2"
+# Check if both domain and subdomain are provided
+if [ $# -eq 2 ]; then
+    domain="$1"
+    subdomain="$2"
+
+    # Use dig to fetch DNS records and awk to parse the output
+    dig_output=$(dig "$subdomain.$domain" | awk '/ANSWER SECTION:/ {getline; print}')
+
+    # Extract record type and destination IP
+    record_type=$(echo "$dig_output" | awk '{print $4}')
+    destination=$(echo "$dig_output" | awk '{print $5}')
+
+    # Display information about the subdomain
+    display_info "$domain" "$subdomain" "$record_type" "$destination"
+
+# If only domain is provided, display information for default subdomains
+elif [ $# -eq 1 ]; then
+    domain="$1"
+
+    # Subdomains to check
+    subdomains=("www" "lb-01" "web-01" "web-02")
+
+    # Loop through each subdomain
+    for subdomain in "${subdomains[@]}"; do
+        # Use dig to fetch DNS records and awk to parse the output
+        dig_output=$(dig "$subdomain.$domain" | awk '/ANSWER SECTION:/ {getline; print}')
+
+        # Extract record type and destination IP
+        record_type=$(echo "$dig_output" | awk '{print $4}')
+        destination=$(echo "$dig_output" | awk '{print $5}')
+
+        # Display information about the subdomain
+        display_info "$domain" "$subdomain" "$record_type" "$destination"
+    done
+
+else
+    echo "Usage: $0 <domain> [subdomain]"
+    exit 1
+fi
