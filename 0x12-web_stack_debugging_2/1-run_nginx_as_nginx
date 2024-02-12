@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# This script configures Nginx to run as the nginx user and listen on port 8080
+
+# Check if Nginx configuration file exists
+nginx_conf="/etc/nginx/nginx.conf"
+if [ ! -f "$nginx_conf" ]; then
+    echo "Nginx configuration file not found: $nginx_conf"
+    exit 1
+fi
+
+# Change the user directive in the Nginx configuration
+sed -i 's/^user.*/user nginx;/g' "$nginx_conf"
+
+# Check if Nginx is listening on port 8080
+nginx_listen_config="listen 8080;"
+if ! grep -q "$nginx_listen_config" "$nginx_conf"; then
+    # Add the listen directive for port 8080 if it's not already present
+    sed -i "/^\s*http {/a\    $nginx_listen_config" "$nginx_conf"
+fi
+
+# Restart Nginx to apply the changes
+service nginx restart
