@@ -5,3 +5,4 @@ This repository contains directories for the following tasks:
 0x03-shell_variables_expansions    0x08-networking_basics_2        0x0D-web_stack_debugging_0     0x13-firewall
 0x04-loops_conditions_and_parsing  0x09-web_infrastructure_design  0x0E-web_stack_debugging_1     0x14-mysql
 0x16-api_advanced
+0x17-web_stack_debugging_3
