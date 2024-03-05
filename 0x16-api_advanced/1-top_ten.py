@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-1-top_ten
+Script to print hot posts on a given Reddit subreddit
 """
 
 import requests
@@ -19,20 +19,24 @@ def top_ten(subreddit):
         or 'None' if the subreddit is invalid.
     """
     url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
-    headers = {'User-Agent': '0x16.API.advanced/1.0 (by /u/qtilicousbbz)'}
+    headers = {'User-Agent': 'MyBot/1.0'}
     params = {'limit': 10}
     response = requests.get(url, headers=headers, params=params)
 
-    if response.status_code != 200:
-        print(None)
-    else:
+    if response.status_code == 200:
         data = response.json().get('data', {}).get('children', [])
         if data:
             for post in data:
                 print(post['data']['title'])
         else:
-            print(None)
+            print("No hot posts found for subreddit", subreddit)
+    else:
+        print("None")
 
 
 if __name__ == '__main__':
-    top_ten('programming')
+    import sys
+    if len(sys.argv) < 2:
+        print("Please pass an argument for the subreddit to search.")
+    else:
+        top_ten(sys.argv[1])
