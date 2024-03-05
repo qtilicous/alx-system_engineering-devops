@@ -19,7 +19,7 @@ def number_of_subscribers(subreddit):
         subreddit is invalid.
     """
     url = 'https://www.reddit.com/r/{}/about.json'.format(subreddit)
-    headers = {'User-Agent': 'my-unique-reddit-user-agent'}
+    headers = {'User-Agent': '0x16.API.advanced/1.0 (by /u/qtilicousbbz)'}
     response = requests.get(url, headers=headers)
 
     if response.status_code != 200:
